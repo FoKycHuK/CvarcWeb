@@ -50,8 +50,7 @@ namespace CvarcWeb
             services.AddMvc();
 
             // Add application services.
-            services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
