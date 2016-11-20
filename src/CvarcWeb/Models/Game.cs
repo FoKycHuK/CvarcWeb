@@ -7,11 +7,6 @@ namespace CvarcWeb.Models
 {
     public class Game
     {
-        public Game()
-        {
-            CommandGameResults = new HashSet<CommandGameResult>();
-        }
-
         public int GameId { get; set; }
         public string GameName { get; set; }
         public string PathToLog { get; set; }
