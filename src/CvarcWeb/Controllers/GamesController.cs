@@ -19,6 +19,14 @@ namespace CvarcWeb.Controllers
         {
             this.context = context;
         }
+
+        public JsonResult Get()
+        {
+            var game = context.Games.Include(g => g.CommandGameResults).First();
+            dynamic heh = new { res = game.CommandGameResults.ToArray()};
+            return new JsonResult(heh);
+        }
+
         [HttpGet]
         public IActionResult CreateTestDb()
         {
@@ -51,7 +59,7 @@ namespace CvarcWeb.Controllers
         {
             var cgr = context.CommandGameResults.First();
             var game = context.Games.Include(g => g.CommandGameResults).First(c => c.GameName == "TestGame");
-            return new ContentResult {Content = $"{game.CommandGameResults.Count} {cgr.Game.GameName}"};
+            return new ContentResult {Content = $"{game.CommandGameResults.First().Results.Count} {cgr.Game.GameName}"};
         }
     }
 }
