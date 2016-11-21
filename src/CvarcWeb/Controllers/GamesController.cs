@@ -22,9 +22,17 @@ namespace CvarcWeb.Controllers
 
         public JsonResult Get()
         {
-            var game = context.Games.Include(g => g.CommandGameResults).First();
-            dynamic heh = new { res = game.CommandGameResults.ToArray()};
-            return new JsonResult(heh);
+            var game = context.Games
+                .Include(g => g.CommandGameResults)
+                .ThenInclude(g => g.Results)
+                .First(c => c.GameName == "TestGame");
+            var anonObj =
+                new
+                {
+                    cgr = game.CommandGameResults.ToArray(),
+                    results = game.CommandGameResults.SelectMany(cgr => cgr.Results).ToArray()
+                };
+            return new JsonResult(anonObj);
         }
 
         [HttpGet]
@@ -57,9 +65,11 @@ namespace CvarcWeb.Controllers
         [HttpGet]
         public IActionResult ReadTestDb()
         {
-            var cgr = context.CommandGameResults.First();
-            var game = context.Games.Include(g => g.CommandGameResults).First(c => c.GameName == "TestGame");
-            return new ContentResult {Content = $"{game.CommandGameResults.First().Results.Count} {cgr.Game.GameName}"};
+            var game = context.Games
+                .Include(g => g.CommandGameResults)
+                .ThenInclude(g => g.Results)
+                .First(c => c.GameName == "TestGame");
+            return new ContentResult {Content = $"{game.CommandGameResults.First().Results.Count} {game.CommandGameResults.Count}"};
         }
     }
 }
