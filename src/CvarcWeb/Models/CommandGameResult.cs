@@ -8,8 +8,6 @@ namespace CvarcWeb.Models
     public class CommandGameResult
     {
         public int CommandGameResultId { get; set; }
-        public int GameId { get; set; }
-        public int CommandId { get; set; }
         public virtual Game Game { get; set; }
         public virtual Command Command { get; set; }
         public virtual ICollection<Result> Results { get; set; }

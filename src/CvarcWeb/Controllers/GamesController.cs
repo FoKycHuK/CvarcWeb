@@ -6,6 +6,7 @@ using CvarcWeb.Data;
 using CvarcWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,16 +24,10 @@ namespace CvarcWeb.Controllers
         public JsonResult Get()
         {
             var game = context.Games
-                .Include(g => g.CommandGameResults)
-                .ThenInclude(g => g.Results)
+                .Include(g => g.CommandGameResults).ThenInclude(g => g.Command)
+                .Include(g => g.CommandGameResults).ThenInclude(g => g.Results)
                 .First(c => c.GameName == "TestGame");
-            var anonObj =
-                new
-                {
-                    cgr = game.CommandGameResults.ToArray(),
-                    results = game.CommandGameResults.SelectMany(cgr => cgr.Results).ToArray()
-                };
-            return new JsonResult(anonObj);
+            return new JsonResult(game, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
         }
 
         [HttpGet]
@@ -44,7 +39,7 @@ namespace CvarcWeb.Controllers
             var firstCommand = new Command {CvarcTag = "123", LinkToImage = "qwe", Name = "Winners"};
             var secondCommand = new Command { CvarcTag = "1234", LinkToImage = "qwer", Name = "Loosers" };
             var firstCommandGameResult = new CommandGameResult {Command = firstCommand, Game = gameResult};
-            var secondCommandGameResult = new CommandGameResult { Command = secondCommand, Game = gameResult };
+            var secondCommandGameResult = new CommandGameResult { Command = secondCommand, Game = gameResult};
             var result1 = new Result {CommandGameResult = firstCommandGameResult, Scores = 10, ScoresType = "MainScores"};
             var result2 = new Result { CommandGameResult = firstCommandGameResult, Scores = 20, ScoresType = "OtherScores" };
             var result3 = new Result { CommandGameResult = secondCommandGameResult, Scores = 5, ScoresType = "MainScores" };
@@ -60,16 +55,6 @@ namespace CvarcWeb.Controllers
             context.Results.Add(result4);
             context.SaveChanges();
             return new ContentResult { Content = "yep!" };
-        }
-
-        [HttpGet]
-        public IActionResult ReadTestDb()
-        {
-            var game = context.Games
-                .Include(g => g.CommandGameResults)
-                .ThenInclude(g => g.Results)
-                .First(c => c.GameName == "TestGame");
-            return new ContentResult {Content = $"{game.CommandGameResults.First().Results.Count} {game.CommandGameResults.Count}"};
         }
     }
 }
