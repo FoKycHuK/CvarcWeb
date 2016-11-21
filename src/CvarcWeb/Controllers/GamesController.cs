@@ -15,19 +15,32 @@ namespace CvarcWeb.Controllers
     public class GamesController : Controller
     {
         private CvarcDbContext context;
+        private const int GamesPerPage = 30;
 
         public GamesController(CvarcDbContext context)
         {
             this.context = context;
         }
 
-        public JsonResult Get()
+        public JsonResult Get(GameFilterModel model)
         {
-            var game = context.Games
-                .Include(g => g.CommandGameResults).ThenInclude(g => g.Command)
-                .Include(g => g.CommandGameResults).ThenInclude(g => g.Results)
-                .First(c => c.GameName == "TestGame");
-            return new JsonResult(game, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            var queryableGames = context.Games
+                .Include(g => g.CommandGameResults).ThenInclude(cgr => cgr.Command)
+                .Include(g => g.CommandGameResults).ThenInclude(cgr => cgr.Results)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(model.GameName))
+                queryableGames = queryableGames.Where(g => g.GameName == model.GameName);
+            if (!string.IsNullOrEmpty(model.CommandName))
+                queryableGames = queryableGames.Where(g => g.CommandGameResults.Any(cgr => cgr.Command.Name == model.CommandName));
+            if (!string.IsNullOrEmpty(model.Region))
+                queryableGames = queryableGames.Where(g => g.CommandGameResults.Any(cgr => cgr.Command.Owner.Region == model.Region));
+
+            var total = queryableGames.Count();
+            queryableGames = queryableGames.Skip(model.Page * GamesPerPage);
+            var games = queryableGames.Take(GamesPerPage).ToArray();
+
+            return new JsonResult(new { games,total }, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
         }
 
         [HttpGet]

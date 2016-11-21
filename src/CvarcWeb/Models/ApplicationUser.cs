@@ -12,5 +12,6 @@ namespace CvarcWeb.Models
         public int CommandId { get; set; }
         public virtual Command Command { get; set; }
         public string FIO { get; set; }
+        public string Region { get; set; }
     }
 }
