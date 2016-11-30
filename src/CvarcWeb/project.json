@@ -1,4 +1,4 @@
-﻿{
+{
   "userSecretsId": "aspnet-CvarcWeb-d6f94fd8-e68b-4d60-8e5e-ed4a68376a7b",
 
   "dependencies": {
@@ -44,7 +44,8 @@
       "version": "1.0.0-preview2-final",
       "type": "build"
     },
-    "MailKit": "1.8.1"
+    "MailKit": "1.8.1",
+    "React.AspNet": "3.0.0"
   },
 
   "tools": {
