@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CvarcWeb.Migrations
+namespace CvarcWeb.Data.Migrations
 {
-    public partial class Redundand_fields : Migration
+    public partial class InitUser : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

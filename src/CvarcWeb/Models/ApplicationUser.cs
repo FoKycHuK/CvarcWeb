@@ -10,7 +10,7 @@ namespace CvarcWeb.Models
     public class ApplicationUser : IdentityUser
     {
         public int CommandId { get; set; }
-        public virtual Command Command { get; set; }
+        public virtual Team Team { get; set; }
         public string FIO { get; set; }
         public string Region { get; set; }
     }

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using CvarcWeb.Data;
 using CvarcWeb.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -22,25 +20,28 @@ namespace CvarcWeb.Controllers
             this.context = context;
         }
 
-        public JsonResult Get(GameFilterModel model)
+        [HttpGet]
+        public JsonResult Index(GameFilterModel model)
         {
             var queryableGames = context.Games
-                .Include(g => g.CommandGameResults).ThenInclude(cgr => cgr.Command)
-                .Include(g => g.CommandGameResults).ThenInclude(cgr => cgr.Results)
+                .Include(g => g.TeamGameResults).ThenInclude(cgr => cgr.Team)
+                .Include(g => g.TeamGameResults).ThenInclude(cgr => cgr.Results)
                 .AsQueryable();
+            if (model == null)
+                return new JsonResult(new {games=queryableGames.Take(GamesPerPage).ToArray(), total=queryableGames.Count()});
 
             if (!string.IsNullOrEmpty(model.GameName))
                 queryableGames = queryableGames.Where(g => g.GameName == model.GameName);
             if (!string.IsNullOrEmpty(model.CommandName))
-                queryableGames = queryableGames.Where(g => g.CommandGameResults.Any(cgr => cgr.Command.Name == model.CommandName));
+                queryableGames = queryableGames.Where(g => g.TeamGameResults.Any(cgr => cgr.Team.Name == model.CommandName));
             if (!string.IsNullOrEmpty(model.Region))
-                queryableGames = queryableGames.Where(g => g.CommandGameResults.Any(cgr => cgr.Command.Owner.Region == model.Region));
+                queryableGames = queryableGames.Where(g => g.TeamGameResults.Any(cgr => cgr.Team.Owner.Region == model.Region));
 
             var total = queryableGames.Count();
             queryableGames = queryableGames.Skip(model.Page * GamesPerPage);
             var games = queryableGames.Take(GamesPerPage).ToArray();
 
-            return new JsonResult(new { games,total }, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
+            return new JsonResult(new { games,total }, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
         }
 
         [HttpGet]
@@ -49,19 +50,19 @@ namespace CvarcWeb.Controllers
             if (context.Games.AsQueryable().Any(g => g.GameName == "TestGame"))
                 return new ContentResult {Content = "nope!"};
             var gameResult = new Game {GameName = "TestGame", PathToLog = "C:/"};
-            var firstCommand = new Command {CvarcTag = "123", LinkToImage = "qwe", Name = "Winners"};
-            var secondCommand = new Command { CvarcTag = "1234", LinkToImage = "qwer", Name = "Loosers" };
-            var firstCommandGameResult = new CommandGameResult {Command = firstCommand, Game = gameResult};
-            var secondCommandGameResult = new CommandGameResult { Command = secondCommand, Game = gameResult};
-            var result1 = new Result {CommandGameResult = firstCommandGameResult, Scores = 10, ScoresType = "MainScores"};
-            var result2 = new Result { CommandGameResult = firstCommandGameResult, Scores = 20, ScoresType = "OtherScores" };
-            var result3 = new Result { CommandGameResult = secondCommandGameResult, Scores = 5, ScoresType = "MainScores" };
-            var result4 = new Result { CommandGameResult = secondCommandGameResult, Scores = 7, ScoresType = "OtherScores" };
+            var firstTeam = new Team {CvarcTag = "123", LinkToImage = "qwe", Name = "Winners"};
+            var secondTeam = new Team { CvarcTag = "1234", LinkToImage = "qwer", Name = "Loosers" };
+            var firstTeamGameResult = new TeamGameResult {Team = firstTeam, Game = gameResult};
+            var secondTeamGameResult = new TeamGameResult { Team = secondTeam, Game = gameResult};
+            var result1 = new Result { TeamGameResult = firstTeamGameResult, Scores = 10, ScoresType = "MainScores"};
+            var result2 = new Result { TeamGameResult = firstTeamGameResult, Scores = 20, ScoresType = "OtherScores" };
+            var result3 = new Result { TeamGameResult = secondTeamGameResult, Scores = 5, ScoresType = "MainScores" };
+            var result4 = new Result { TeamGameResult = secondTeamGameResult, Scores = 7, ScoresType = "OtherScores" };
             context.Games.Add(gameResult);
-            context.Commands.Add(firstCommand);
-            context.Commands.Add(secondCommand);
-            context.CommandGameResults.Add(firstCommandGameResult);
-            context.CommandGameResults.Add(secondCommandGameResult);
+            context.Teams.Add(firstTeam);
+            context.Teams.Add(secondTeam);
+            context.TeamGameResults.Add(firstTeamGameResult);
+            context.TeamGameResults.Add(secondTeamGameResult);
             context.Results.Add(result1);
             context.Results.Add(result2);
             context.Results.Add(result3);
