@@ -20,8 +20,13 @@ namespace CvarcWeb.Controllers
             this.context = context;
         }
 
+        public IActionResult Index()
+        {
+            return View();
+        }
+
         [HttpGet]
-        public JsonResult Index(GameFilterModel model)
+        public JsonResult Get(GameFilterModel model)
         {
             var queryableGames = context.Games
                 .Include(g => g.TeamGameResults).ThenInclude(cgr => cgr.Team)

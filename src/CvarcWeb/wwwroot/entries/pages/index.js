@@ -2,4 +2,4 @@
 
 import CommentBox from '../../js/first';
 
-ReactDOM.render(React.createElement(CommentBox), document.getElementById('content'));
+ReactDOM.render(React.createElement(CommentBox), document.querySelector('#content'));

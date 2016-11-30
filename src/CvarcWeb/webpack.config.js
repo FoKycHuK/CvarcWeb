@@ -12,7 +12,8 @@ var WATCH_MODE = process.env.WATCH_MODE;
 module.exports = [{
     context: path.join(__dirname, 'wwwroot/entries'),
     entry: {
-        index: "./pages/index"
+        index: "./pages/index",
+        games: "./pages/games"
     },
 
     externals: {
