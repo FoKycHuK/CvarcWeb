@@ -66,41 +66,6 @@ module.exports = [{
         // Собираем CSS/SCSS-бандлы в .css файлы, а в не в JS: https://webpack.github.io/docs/stylesheets.html#separate-css-bundle
         new ExtractTextPlugin('css/[name].css')
     ]
-},
-{
-    context: path.join(__dirname, 'wwwroot/entries'),
-    entry: {
-        oldIE: ['babel-polyfill'],
-        vendor: ['react', 'react-dom']
-    },
-
-    output: {
-        path: path.join(__dirname, 'wwwroot/dist'),
-        filename: 'js/[name].js'
-    },
-
-    devtool: null,
-
-    resolve: {
-        extensions: ['', '.js']
-    },
-
-    module: {
-        loaders: [
-            { test: require.resolve('react'), loader: 'expose?React' },
-            { test: require.resolve('react-dom'), loader: 'expose?ReactDOM' }
-        ]
-    },
-
-    plugins: [
-        new webpack.NoErrorsPlugin(),
-
-        // В режиме production отключается debug-вывод у React и, возможно, у каких-то других библиотек
-        // Ловушка: React будет работать в IE8 только в режиме production, подробно написано в wat и в баге: https://github.com/facebook/react/issues/3188
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV': '"' + NODE_ENV + '"'
-        })
-    ]
 }];
 
 if (NODE_ENV === 'production') {

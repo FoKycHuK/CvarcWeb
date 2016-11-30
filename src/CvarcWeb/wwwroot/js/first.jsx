@@ -2,9 +2,9 @@
 
 class CommentBox extends Component {
     render() {
-        return <div>
+        return (<div>
                    Hello, world! I am a CommentBox.
-               </div>;
+               </div>);
     }
 };
 
