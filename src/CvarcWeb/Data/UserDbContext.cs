@@ -8,9 +8,9 @@ using CvarcWeb.Models;
 
 namespace CvarcWeb.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class UserDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public UserDbContext(DbContextOptions<UserDbContext> options)
             : base(options)
         {
         }

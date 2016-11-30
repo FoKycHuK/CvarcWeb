@@ -36,9 +36,10 @@ namespace CvarcWeb
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddDbContext<UserDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+            services.AddDbContext<CvarcDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc();
 
             //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -56,7 +57,7 @@ namespace CvarcWeb
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 6;
             })
-            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddEntityFrameworkStores<UserDbContext>()
             .AddDefaultTokenProviders();
         }
 

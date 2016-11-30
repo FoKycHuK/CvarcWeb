@@ -9,5 +9,9 @@ namespace CvarcWeb.Models
     // Add profile data for application users by adding properties to the ApplicationUser class
     public class ApplicationUser : IdentityUser
     {
+        public int CommandId { get; set; }
+        public virtual Command Command { get; set; }
+        public string FIO { get; set; }
+        public string Region { get; set; }
     }
 }
