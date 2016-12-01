@@ -37,8 +37,8 @@ namespace CvarcWeb.Controllers
 
             if (!string.IsNullOrEmpty(model.GameName))
                 queryableGames = queryableGames.Where(g => g.GameName == model.GameName);
-            if (!string.IsNullOrEmpty(model.CommandName))
-                queryableGames = queryableGames.Where(g => g.TeamGameResults.Any(cgr => cgr.Team.Name == model.CommandName));
+            if (!string.IsNullOrEmpty(model.TeamName))
+                queryableGames = queryableGames.Where(g => g.TeamGameResults.Any(cgr => cgr.Team.Name == model.TeamName));
             if (!string.IsNullOrEmpty(model.Region))
                 queryableGames = queryableGames.Where(g => g.TeamGameResults.Any(cgr => cgr.Team.Owner.Region == model.Region));
 

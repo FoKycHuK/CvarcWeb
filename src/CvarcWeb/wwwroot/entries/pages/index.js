@@ -1,5 +1,5 @@
 ﻿'use strict';
 
-import CommentBox from '../../js/first';
+import Index from '../../js/index';
 
-ReactDOM.render(React.createElement(CommentBox), document.querySelector('#content'));
+ReactDOM.render(React.createElement(Index), document.querySelector('#content'));
