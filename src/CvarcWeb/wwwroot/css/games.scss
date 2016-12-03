@@ -22,10 +22,21 @@ h2 {
 
 #games-filter {
     font-size: 16px;
-    justify-content: center;
     width: 100%;
     margin: 0 auto;
     flex: 1;
+}
+
+.empty-games-list {
+    line-height: 60vh;
+}
+
+.empty-games-list span {
+    display: inline-block;
+    text-align: center;
+    font-size: 30px;
+    width: 100%;
+    vertical-align: middle;
 }
 
 .games-list {
@@ -34,7 +45,6 @@ h2 {
     display: flex;
     list-style: none;
     flex-direction: row;
-    justify-content: space-around;
     align-items: center;
     flex-wrap: wrap;
 }
@@ -50,6 +60,8 @@ h2 {
     align-items: center;
     margin-bottom: 20px;
     background-color: rgba(255, 255, 255, 0.1);
+    margin-left: .5vw;
+    margin-right: .5vw;
 }
 
 .game a {

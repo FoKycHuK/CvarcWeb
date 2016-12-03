@@ -2,6 +2,23 @@
 import Games from './games';
 
 class GamesFilter extends Component {
+    constructor() {
+        super();
+        this.state = {};
+        this.state.games = [];
+        var params = { GameName: "TestGame" };
+        var query = Object.keys(params)
+            .map(k => encodeURIComponent(k) + "=" + encodeURIComponent(params[k]))
+            .join("&");
+        fetch(`Games/Find?${query}`, {
+                    credentials: "same-origin",
+                    headers: { "Content-Type": "application/json", "enctype": "json" }
+                }
+            )
+            .then(data => data.json())
+            .then(data => this.setState({ games: data.games }));
+    }
+
     render() {
         var games = [
             {
@@ -141,7 +158,8 @@ class GamesFilter extends Component {
                 ]
             }
         ];
-        //var i = 4;
+        //games = [];
+        var i = 4;
         //var moreGames = games.map(g => {
         //    var game = JSON.parse(JSON.stringify(g));
         //    game.GameId = i++;
@@ -154,14 +172,14 @@ class GamesFilter extends Component {
         //    return game;
         //});
         //games = games.concat(moreGames);
-        //var moreGames = games.map(g => {
-        //    var game = JSON.parse(JSON.stringify(g));
-        //    game.GameId = i++;
-        //    return game;
-        //});
-        //games = games.concat(moreGames);
+        var moreGames = games.map(g => {
+            var game = JSON.parse(JSON.stringify(g));
+            game.GameId = i++;
+            return game;
+        });
+        games = games.concat(moreGames);
 
-        return (<Games games={games}/>);
+        return (<Games games={this.state.games}/>);
     }
 };
 

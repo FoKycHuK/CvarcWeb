@@ -2,7 +2,6 @@
 using CvarcWeb.Data;
 using CvarcWeb.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing.Constraints;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -12,7 +11,7 @@ namespace CvarcWeb.Controllers
 {
     public class GamesController : Controller
     {
-        private CvarcDbContext context;
+        private readonly CvarcDbContext context;
         private const int GamesPerPage = 30;
 
         public GamesController(CvarcDbContext context)
@@ -26,28 +25,32 @@ namespace CvarcWeb.Controllers
         }
 
         [HttpGet]
-        public JsonResult Get(GameFilterModel model)
+        public JsonResult Find(GameFilterModel filters)
         {
-            var queryableGames = context.Games
-                .Include(g => g.TeamGameResults).ThenInclude(cgr => cgr.Team)
-                .Include(g => g.TeamGameResults).ThenInclude(cgr => cgr.Results)
-                .AsQueryable();
-            if (model == null)
-                return new JsonResult(new {games=queryableGames.Take(GamesPerPage).ToArray(), total=queryableGames.Count()});
-
-            if (!string.IsNullOrEmpty(model.GameName))
-                queryableGames = queryableGames.Where(g => g.GameName == model.GameName);
-            if (!string.IsNullOrEmpty(model.TeamName))
-                queryableGames = queryableGames.Where(g => g.TeamGameResults.Any(cgr => cgr.Team.Name == model.TeamName));
-            if (!string.IsNullOrEmpty(model.Region))
-                queryableGames = queryableGames.Where(g => g.TeamGameResults.Any(cgr => cgr.Team.Owner.Region == model.Region));
-
-            var total = queryableGames.Count();
-            queryableGames = queryableGames.Skip(model.Page * GamesPerPage);
-            var games = queryableGames.Take(GamesPerPage).ToArray();
-
-            return new JsonResult(new { games,total }, new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore});
+            var games = GetGames(filters);
+            var total = games.Count();
+            return new JsonResult(new { games = GetPage(filters, games), total },
+                                  new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
         }
+
+        private IQueryable<Game> GetGames(GameFilterModel filters)
+        {
+            var foundGames = context.Games
+                            .Include(g => g.TeamGameResults).ThenInclude(cgr => cgr.Team)
+                            .Include(g => g.TeamGameResults).ThenInclude(cgr => cgr.Results)
+                            .Where(g => string.IsNullOrEmpty(filters.GameName) || g.GameName == filters.GameName)
+                            .Where(g => string.IsNullOrEmpty(filters.TeamName) || g.TeamGameResults.Any(gr => gr.Team.Name == filters.TeamName))
+                            .Where(g => string.IsNullOrEmpty(filters.Region) || g.TeamGameResults.Any(gr => gr.Team.Owner.Region == filters.Region))
+                            .AsQueryable();
+            if (!filters.GameId.HasValue)
+                return foundGames;
+            return foundGames.Where(g => g.GameId == filters.GameId.Value);
+        }
+
+        private static Game[] GetPage(GameFilterModel model, IQueryable<Game> filteredGames) => 
+            filteredGames.Skip(model.Page * GamesPerPage)
+                         .Take(GamesPerPage)
+                         .ToArray();
 
         [HttpGet]
         public IActionResult CreateTestDb()
