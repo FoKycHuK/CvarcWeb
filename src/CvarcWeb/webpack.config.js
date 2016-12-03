@@ -13,7 +13,7 @@ module.exports = [{
     context: path.join(__dirname, 'wwwroot/entries'),
     entry: {
         index: "./pages/index",
-        games: "./pages/games"
+        games: ["./pages/games", "./styles/games"]
     },
 
     externals: {
@@ -45,7 +45,7 @@ module.exports = [{
             },
             {
                 test: /\.scss$/,
-                loader: ExtractTextPlugin.extract(NODE_ENV === 'development' ? 'css?sourceMap!postcss!resolve-url!sass?sourceMap' : 'css!postcss!resolve-url!sass?sourceMap'),
+                loader: ExtractTextPlugin.extract('css?sourceMap!autoprefixer!sass?sourceMap'),
                 include: [path.join(__dirname, 'wwwroot/css'), path.join(__dirname, 'wwwroot/entries/styles')]
             },
             {
