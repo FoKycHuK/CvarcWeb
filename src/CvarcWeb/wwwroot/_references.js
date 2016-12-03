@@ -4,7 +4,6 @@
 /// <reference path="dist/js/index.js" />
 /// <reference path="entries/pages/games.js" />
 /// <reference path="entries/pages/index.js" />
-/// <reference path="js/site.min.js" />
 /// <reference path="lib/bootstrap/dist/js/bootstrap.js" />
 /// <reference path="lib/jquery/dist/jquery.js" />
 /// <reference path="lib/jquery-validation/dist/jquery.validate.js" />
