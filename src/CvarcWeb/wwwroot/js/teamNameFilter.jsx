@@ -1,52 +1,48 @@
 ﻿import {Component} from 'react';
-import Rx from 'Rx';
 
 class TeamNameFilter extends Component {
-    constructor() {
-        super();
-        this.state = {};
+    componentDidMount() {
+        this.setSpinner();
+        let chain = Promise.resolve();
+        let changed = false;
+        $(this.__input).on('input', () => {
+            changed = true;
+            setTimeout(() => changed = false, 200);
+            setTimeout(() => {
+                this.showSpinner();
+                chain = chain.then(() => !changed && this.props.loadGames().then(() => this.hideSpinner()));
+            }, 300);
+        });
     }
 
-    componentDidMount() {
-        var teams = new Bloodhound({
-            datumTokenizer: function (datum) {
-                return Bloodhound.tokenizers.whitespace(datum.value);
-            },
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: {
-                wildcard: "%QUERY",
-                url: "/Teams/?teamNamePrefix=%QUERY",
-                transform: function(response) {
-                    return $.map(response.teams, function(team) {
-                        return {
-                            value: team
-                        };
-                    });
-                }
-            }
-        });
-        $(this.__input).typeahead({
-            highlight: true,
-            minLength: 2
-        }, {
-            display: 'value',
-            source: teams
-        });
+    setSpinner() {
+        this.__spinnerContainer.appendChild(document.querySelector("#spinner-source"));
+        this.__spinner = this.__spinnerContainer.firstElementChild;
+        this.__spinner.removeAttribute("id");
+        this.hideSpinner();
+    }
+
+    hideSpinner() {
+        this.__spinner.style.display = "none";
+    }
+
+    showSpinner() {
+        this.__spinner.style.display = "block";
+    }
+
+    getValue() {
+        return this.__input.value;
     }
 
     render() {
         return (
             <div className="team-name-filter">
                 <div className="row-fluid">
-                    <form role="form">
                     <div className="form-group">
                         <input type="text" className="typeahead form-control" placeholder="Team name" autoComplete="off" ref={(c) => this.__input = c}/>
                     </div>
-                    </form>
                 </div>
-                <div className="row-fluid">
-                    <ul id="results" ref={(c) => this.__results = c}></ul>
-                </div>
+                <div ref={(c) => this.__spinnerContainer = c}/>
             </div>);
     }
 };
