@@ -53,7 +53,7 @@ class Game extends Component {
                     <a href={game.PathToLog}>#{game.GameId}</a>
                 </div>
                 <div className="game-log">
-                    <a href={game.PathToLog}>Посмотреть запись</a>
+                    <a href={game.PathToLog}></a>
                 </div>
                 <div className="game-results">{results}</div>
             </li>
