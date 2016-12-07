@@ -3,15 +3,23 @@
 class TeamNameFilter extends Component {
     componentDidMount() {
         this.setSpinner();
-        let chain = Promise.resolve();
         let changed = false;
         $(this.__input).on('input', () => {
             changed = true;
-            setTimeout(() => changed = false, 200);
-            setTimeout(() => {
+            new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    if (!changed) {
+                        reject();
+                    }
+                    changed = false;
+                    resolve();
+                }, 750);
+            }).then(() => {
                 this.showSpinner();
-                chain = chain.then(() => !changed && this.props.loadGames().then(() => this.hideSpinner()));
-            }, 300);
+                this.props.pageState.filters.Page = 0;
+                this.props.loadGames().then(() => this.hideSpinner());
+            })
+            .catch(() => {});
         });
     }
 
@@ -32,6 +40,10 @@ class TeamNameFilter extends Component {
 
     getValue() {
         return this.__input.value;
+    }
+
+    setValue(value) {
+        this.__input.value = value;
     }
 
     render() {
