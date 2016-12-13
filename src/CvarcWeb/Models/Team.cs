@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace CvarcWeb.Models
 {
-    public class Command
+    public class Team
     {
-        public int CommandId { get; set; }
+        public int TeamId { get; set; }
         public string Name { get; set; }
         public ApplicationUser Owner { get; set; }
         public string CvarcTag { get; set; }

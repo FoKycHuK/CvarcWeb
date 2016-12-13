@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -46,6 +42,10 @@ namespace CvarcWeb
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc();
 
+            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            //services.AddReact();
+
+
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
@@ -58,7 +58,7 @@ namespace CvarcWeb
                 options.Password.RequiredLength = 6;
             })
             .AddEntityFrameworkStores<UserDbContext>()
-            .AddDefaultTokenProviders(); ;
+            .AddDefaultTokenProviders();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,7 +77,11 @@ namespace CvarcWeb
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
+            //app.UseReact(config =>
+            //{
+//              config.SetLoadBabel(false);
+//              config.AddScriptWithoutTransform("~/Scripts/first.js");
+            //});
             app.UseStaticFiles();
 
             app.UseIdentity();
