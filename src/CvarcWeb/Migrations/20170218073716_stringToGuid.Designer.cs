@@ -8,9 +8,10 @@ using CvarcWeb.Data;
 namespace CvarcWeb.Migrations
 {
     [DbContext(typeof(CvarcDbContext))]
-    partial class CvarcDbContextModelSnapshot : ModelSnapshot
+    [Migration("20170218073716_stringToGuid")]
+    partial class stringToGuid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.1")
@@ -80,22 +81,6 @@ namespace CvarcWeb.Migrations
                     b.HasIndex("TeamId");
 
                     b.ToTable("TeamGameResults");
-                });
-
-            modelBuilder.Entity("CvarcWeb.Models.Tournament", b =>
-                {
-                    b.Property<int>("TournamentId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("TournamentTree");
-
-                    b.Property<int>("Type");
-
-                    b.HasKey("TournamentId");
-
-                    b.ToTable("Tournaments");
                 });
 
             modelBuilder.Entity("CvarcWeb.Models.Result", b =>

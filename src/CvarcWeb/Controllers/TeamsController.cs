@@ -28,5 +28,11 @@ namespace CvarcWeb.Controllers
                             .ToArray();
             return new JsonResult(new { teams });
         }
+
+        [HttpGet]
+        public JsonResult GetAllCvarcTags(string apiKey)
+        {
+            return new JsonResult(apiKey == "huj" ? context.Teams.Select(t => t.CvarcTag).ToArray() : new Guid[0]);
+        }
     }
 }
