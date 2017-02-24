@@ -2,6 +2,7 @@
 /// <reference path="../webpack.config.js" />
 /// <reference path="dist/js/games.js" />
 /// <reference path="dist/js/index.js" />
+/// <reference path="dist/js/tournaments.js" />
 /// <reference path="entries/pages/games.js" />
 /// <reference path="entries/pages/index.js" />
 /// <reference path="lib/bootstrap/dist/js/bootstrap.js" />
