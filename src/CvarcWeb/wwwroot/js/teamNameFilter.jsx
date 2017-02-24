@@ -51,7 +51,7 @@ class TeamNameFilter extends Component {
             <div className="team-name-filter">
                 <div className="row-fluid">
                     <div className="form-group">
-                        <input type="text" className="typeahead form-control" placeholder="Team name" autoComplete="off" ref={(c) => this.__input = c}/>
+                        <input type="text" className="typeahead form-control" placeholder="Search for team (start typing)" autoComplete="off" ref={(c) => this.__input = c}/>
                     </div>
                 </div>
                 <div ref={(c) => this.__spinnerContainer = c}/>

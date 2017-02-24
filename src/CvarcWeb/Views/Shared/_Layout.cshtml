@@ -16,6 +16,7 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true"/>
     </environment>
     @RenderSection("styles", false)
+    @RenderSection("unity", false)
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -33,6 +34,7 @@
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Games" asp-action="Index">Games</a></li>
+                    <li><a asp-area="" asp-controller="Tournaments" asp-action="Index">Tournaments</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>

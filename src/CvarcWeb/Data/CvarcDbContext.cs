@@ -14,5 +14,6 @@ namespace CvarcWeb.Data
         public DbSet<Game> Games { get; set; }
         public DbSet<Result> Results { get; set; }
         public DbSet<TeamGameResult> TeamGameResults { get; set; }
+        public DbSet<Tournament> Tournaments { get; set; }
     }
 }
