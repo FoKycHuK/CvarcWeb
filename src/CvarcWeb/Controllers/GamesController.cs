@@ -74,8 +74,8 @@ namespace CvarcWeb.Controllers
         private void AddRandomData()
         {
             var gameResult = new Game { GameName = RandomString(random.Next(8, 20)), PathToLog = "C:/" };
-            var firstTeam = new Team { CvarcTag = "123", LinkToImage = "qwe", Name = RandomString(random.Next(8, 20)) };
-            var secondTeam = new Team { CvarcTag = "1234", LinkToImage = "qwer", Name = RandomString(random.Next(8, 20)) };
+            var firstTeam = new Team { CvarcTag = Guid.NewGuid(), LinkToImage = "qwe", Name = RandomString(random.Next(8, 20)) };
+            var secondTeam = new Team { CvarcTag = Guid.NewGuid(), LinkToImage = "qwer", Name = RandomString(random.Next(8, 20)) };
             var firstTeamGameResult = new TeamGameResult { Team = firstTeam, Game = gameResult };
             var secondTeamGameResult = new TeamGameResult { Team = secondTeam, Game = gameResult };
             var result1 = new Result { TeamGameResult = firstTeamGameResult, Scores = random.Next(100), ScoresType = "MainScores" };
