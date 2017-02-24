@@ -13,7 +13,8 @@ module.exports = [{
     context: path.join(__dirname, 'wwwroot/entries'),
     entry: {
         index: "./pages/index",
-        games: ["./pages/games", "./styles/games"]
+        games: ["./pages/games", "./styles/games"],
+        tournaments: ["./pages/tournaments", "./styles/tournaments"]
     },
 
     externals: {

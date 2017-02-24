@@ -47,8 +47,9 @@ class Game extends Component {
                            </div>)}
                    </div>;
         });
+
         return (
-            <li className="game">
+            <div className={this.props.isHidden ? "hidden-game " : "game"} data-stage={this.props.stage + 1}>
                 <div className="game-id">
                     <a href={game.PathToLog}>#{game.GameId}</a>
                 </div>
@@ -56,7 +57,7 @@ class Game extends Component {
                     <a href={game.PathToLog}><div></div></a>
                 </div>
                 <div className="game-results">{results}</div>
-            </li>
+            </div>
         );
     }
 };

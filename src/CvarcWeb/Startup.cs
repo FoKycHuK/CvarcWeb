@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -6,8 +7,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using CvarcWeb.Data;
+using CvarcWeb.Data.Repositories;
 using CvarcWeb.Models;
 using CvarcWeb.Services;
+using CvarcWeb.Tournaments.Playoff;
 
 namespace CvarcWeb
 {
@@ -48,6 +51,9 @@ namespace CvarcWeb
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<TournamentGenerator>();
+            services.AddTransient<GamesRepository>();
+            services.AddSingleton<Random>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {

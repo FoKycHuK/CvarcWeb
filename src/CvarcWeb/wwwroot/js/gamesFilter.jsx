@@ -33,13 +33,13 @@ class GamesFilter extends Component {
                       .filter(k => !!params[k])
                       .map(k => {
                             const v = params[k];
-                            return `${k}=${v}`;
+                            return `${encodeURIComponent(k)}=${encodeURIComponent(v)}`;
                         })
                       .join("&")) || "";
     }
 
     setFiltersValues() {
-        this.__teamNameFilter.setValue(this.state.filters.TeamName || "");
+        this.__teamNameFilter.setValue(decodeURIComponent(this.state.filters.TeamName || ""));
     }
 
     parseQuery(query) {
